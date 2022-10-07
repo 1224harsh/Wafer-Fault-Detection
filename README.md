@@ -23,20 +23,6 @@ The client will send data in multiple sets of files in batches at a given locati
 Apart from training files, we also require a "schema" file from the client, which contains all the relevant information about the training files such as:
 Name of the files, Length of Date value in FileName, Length of Time value in FileName, Number of Columns, Name of the Columns, and their datatype.
 
-## Data Validation - 
-
-In this step, we perform different sets of validation on the given set of training files.  
-Name Validation- We validate the name of the files based on the given name in the schema file. We have created a regex pattern as per the name given in the schema file to use for validation. After validating the pattern in the name, we check for the length of date in the file name as well as the length of time in the file name. If all the values are as per requirement, we move such files to "Good_Data_Folder" else we move such files to "Bad_Data_Folder."
-
- Number of Columns - We validate the number of columns present in the files, and if it doesn't match with the value given in the schema file, then the file is moved to "Bad_Data_Folder."
-
- Name of Columns - The name of the columns is validated and should be the same as given in the schema file. If not, then the file is moved to "Bad_Data_Folder".
-
-The datatype of columns - The datatype of columns is given in the schema file. This is validated when we insert the files into Database. If the datatype is wrong, then the file is moved to "Bad_Data_Folder".
-
-Null values in columns - If any of the columns in a file have all the values as NULL or missing, we discard such a file and move it to "Bad_Data_Folder".
-
-
 ## Model Training - 
 
 1) Data Export from Db - The data in a stored database is exported as a CSV file to be used for model training.
@@ -91,7 +77,10 @@ In this step, we perform different sets of validation on the given set of traini
    b) Check if any column has zero standard deviation, remove such columns as we did in training.
 
 3) Clustering - KMeans model created during training is loaded, and clusters for the preprocessed prediction data is predicted.
+   Clusters are decided through elbow method example is given below
+![K-Means_Elbow1](https://user-images.githubusercontent.com/52818519/194665403-16fbd070-9bb1-472f-895c-d39e00d9d6c6.PNG)
 
+   
 4) Prediction - Based on the cluster number, the respective model is loaded and is used to predict the data for that cluster.
 
 5) Once the prediction is made for all the clusters, the predictions along with the Wafer names are saved in a CSV file at a given location and the location is returned to the client.
